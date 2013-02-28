@@ -1,6 +1,6 @@
 # brfs
 
-browserify fs.readFileSync() static asset bundler
+browserify fs.readFileSync() static asset inliner
 
 This module is a plugin for [browserify](http://browserify.org) to parse the AST
 for `fs.readFileSync()` calls so that you can inline file contents into your

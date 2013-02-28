@@ -1,7 +1,7 @@
 {
     "name": "brfs",
     "version": "0.0.0",
-    "description": "browserify transform to inline fs.readFileSync() calls with file contents",
+    "description": "browserify fs.readFileSync() static asset inliner",
     "main": "index.js",
     "dependencies": {
         "through": "~2.2.0",
