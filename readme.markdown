@@ -2,11 +2,15 @@
 
 browserify fs.readFileSync() static asset inliner
 
+[![build status](https://secure.travis-ci.org/substack/brfs.png)](http://travis-ci.org/substack/brfs)
+
 This module is a plugin for [browserify](http://browserify.org) to parse the AST
 for `fs.readFileSync()` calls so that you can inline file contents into your
 bundles.
 
-Even though this module
+Even though this module is intended for use with browserify, nothing about it is
+particularly specific to browserify so it should be generally useful in other
+projects.
 
 # example
 
