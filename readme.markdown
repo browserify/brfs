@@ -6,6 +6,8 @@ This module is a plugin for [browserify](http://browserify.org) to parse the AST
 for `fs.readFileSync()` calls so that you can inline file contents into your
 bundles.
 
+Even though this module
+
 # example
 
 for a main.js:
@@ -30,6 +32,18 @@ first `npm install brfs` into your project, then:
 $ browserify -t brfs example/main.js > bundle.js
 ```
 
+now in the bundle output file,
+
+``` js
+var html = fs.readFileSync(__dirname + '/robot.html');
+```
+
+turns into:
+
+``` js
+var html = "<b>beep boop</b>\n";
+```
+
 ## or with the api
 
 ``` js
@@ -51,6 +65,38 @@ The `pathExpr` function is evaluated as an expression with `__dirname` and
 
 If you want differently-encoded file contents for your inline content you can
 set `enc` to `'base64'` or `'hex'`.
+
+If you want to use this plugin directly, not through browserify, the api
+follows.
+
+``` js
+var brfs = require('brfs')
+```
+
+## var tr = brfs(file)
+
+Return a through stream `tr` inlining `fs.readFileSync()` file contents
+in-place.
+
+# usage
+
+A tiny command-line program ships with this module to make debugging easier.
+
+```
+usage:
+
+  brfs file
+ 
+    Inline `fs.readFileSync()` calls from `file`, printing the transformed file
+    contents to stdout.
+
+  brfs
+  brfs -
+ 
+    Inline `fs.readFileSync()` calls from stdin, printing the transformed file
+    contents to stdout.
+
+```
 
 # install
 
