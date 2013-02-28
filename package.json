@@ -1,0 +1,39 @@
+{
+    "name": "brfs",
+    "version": "0.0.0",
+    "description": "browserify transform to inline fs.readFileSync() calls with file contents",
+    "main": "index.js",
+    "dependencies": {
+        "through": "~2.2.0",
+        "falafel": "~0.1.6",
+        "escodegen": "0.0.17"
+    },
+    "devDependencies": {
+        "tap": "~0.4.0",
+        "browserify": "~2.3.1"
+    },
+    "scripts": {
+        "test": "tap test/*.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/substack/brfs.git"
+    },
+    "homepage": "https://github.com/substack/brfs",
+    "keywords": [
+        "browserify",
+        "fs",
+        "readFileSync",
+        "plugin",
+        "static",
+        "asset",
+        "bundle",
+        "base64"
+    ],
+    "author": {
+        "name": "James Halliday",
+        "email": "mail@substack.net",
+        "url": "http://substack.net"
+    },
+    "license": "MIT"
+}
