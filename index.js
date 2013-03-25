@@ -24,6 +24,11 @@ module.exports = function (file) {
             && node.parent.id.type === 'Identifier') {
                 fsNames[node.parent.id.name] = true;
             }
+            if (isRequire(node) && node.arguments[0].value === 'fs'
+            && node.parent.type === 'AssignmentExpression'
+            && node.parent.left.type === 'Identifier') {
+                fsNames[node.parent.left.name] = true;
+            }
             if (node.type === 'CallExpression'
             && node.callee.type === 'MemberExpression'
             && node.callee.object.type === 'Identifier'
