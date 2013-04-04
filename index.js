@@ -17,40 +17,45 @@ module.exports = function (file) {
     function end () {
         var tr = this;
         var pending = 0;
-        
-        var output = falafel(data, function (node) {
-            if (isRequire(node) && node.arguments[0].value === 'fs'
-            && node.parent.type === 'VariableDeclarator'
-            && node.parent.id.type === 'Identifier') {
-                fsNames[node.parent.id.name] = true;
-            }
-            if (isRequire(node) && node.arguments[0].value === 'fs'
-            && node.parent.type === 'AssignmentExpression'
-            && node.parent.left.type === 'Identifier') {
-                fsNames[node.parent.left.name] = true;
-            }
-            if (node.type === 'CallExpression'
-            && node.callee.type === 'MemberExpression'
-            && node.callee.object.type === 'Identifier'
-            && fsNames[node.callee.object.name]
-            && node.callee.property.type === 'Identifier'
-            && node.callee.property.name === 'readFileSync') {
-                
-                var args = node.arguments;
-                var t = 'return ' + unparse(args[0]);
-                var fpath = Function(vars, t)(file, dirname);
-                var enc = args[1]
-                    ? Function('return ' + unparse(args[1]))()
-                    : 'utf8'
-                ;
-                ++ pending;
-                fs.readFile(fpath, enc, function (err, src) {
-                    if (err) return tr.emit('error', err);
-                    node.update(JSON.stringify(src));
-                    if (--pending === 0) finish();
-                });
-            }
-        });
+
+        try {
+            var output = falafel(data, function (node) {
+                if (isRequire(node) && node.arguments[0].value === 'fs'
+                && node.parent.type === 'VariableDeclarator'
+                && node.parent.id.type === 'Identifier') {
+                    fsNames[node.parent.id.name] = true;
+                }
+                if (isRequire(node) && node.arguments[0].value === 'fs'
+                && node.parent.type === 'AssignmentExpression'
+                && node.parent.left.type === 'Identifier') {
+                    fsNames[node.parent.left.name] = true;
+                }
+                if (node.type === 'CallExpression'
+                && node.callee.type === 'MemberExpression'
+                && node.callee.object.type === 'Identifier'
+                && fsNames[node.callee.object.name]
+                && node.callee.property.type === 'Identifier'
+                && node.callee.property.name === 'readFileSync') {
+
+                    var args = node.arguments;
+                    var t = 'return ' + unparse(args[0]);
+                    var fpath = Function(vars, t)(file, dirname);
+                    var enc = args[1]
+                        ? Function('return ' + unparse(args[1]))()
+                        : 'utf8'
+                    ;
+                    ++ pending;
+                    fs.readFile(fpath, enc, function (err, src) {
+                        if (err) return tr.emit('error', err);
+                        node.update(JSON.stringify(src));
+                        if (--pending === 0) finish();
+                    });
+                }
+            });
+        } catch (err) {
+            this.emit('error', new Error(err.toString().replace('Error: ', '')
+                + ' (' + file + ')'));
+        }
         
         if (pending === 0) finish();
         
