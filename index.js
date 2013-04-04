@@ -53,7 +53,8 @@ module.exports = function (file) {
                 }
             });
         } catch (err) {
-            this.emit('error', new Error(err.toString() + ' (' + file + ')'));
+            this.emit('error', new Error(err.toString().replace('Error: ', '')
+                + ' (' + file + ')'));
         }
         
         if (pending === 0) finish();
