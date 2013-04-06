@@ -1,6 +1,6 @@
 {
     "name": "brfs",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "browserify fs.readFileSync() static asset inliner",
     "main": "index.js",
     "bin": "bin/cmd.js",
