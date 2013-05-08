@@ -6,6 +6,7 @@ var falafel = require('falafel');
 var unparse = require('escodegen').generate;
 
 module.exports = function (file) {
+    if (!/\.js$/.test(file)) return through();
     var data = '';
     var fsNames = {};
     var vars = [ '__filename', '__dirname' ];
