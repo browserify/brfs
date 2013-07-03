@@ -5,7 +5,7 @@ var vm = require('vm');
 var fs = require('fs');
 var path = require('path');
 
-test('bundle a file', function (t) {
+test('skip parsing json', function (t) {
     t.plan(1);
     
     var b = browserify();

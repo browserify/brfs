@@ -31,6 +31,6 @@ test('parse non-js, non-json files', function (t) {
     });
     
     function log (msg) {
-        t.equal('7\n', msg);
+        t.equal(13, msg);
     }
 });
