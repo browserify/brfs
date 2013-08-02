@@ -5,6 +5,7 @@ var through = require('through');
 var falafel = require('falafel');
 var unparse = require('escodegen').generate;
 
+
 module.exports = function (file) {
     if (/\.json$/.test(file)) return through();
     var data = '';
@@ -15,7 +16,22 @@ module.exports = function (file) {
     
     var tr = through(write, end);
     return tr;
-    
+
+    function containsUndefinedVariable (node) {
+        if (node.type === 'Identifier') {
+            if (vars.indexOf(node.name) === -1) {
+                return true;
+            }
+        }
+        else if (node.type === 'BinaryExpression') {
+            return containsUndefinedVariable(node.left) || containsUndefinedVariable(node.right);
+        }
+        else {
+            return false;
+        }
+    };
+
+
     function write (buf) { data += buf }
     function end () {
         try { var output = parse() }
@@ -51,20 +67,23 @@ module.exports = function (file) {
             && fsNames[node.callee.object.name]
             && node.callee.property.type === 'Identifier'
             && node.callee.property.name === 'readFileSync') {
-                
                 var args = node.arguments;
-                var t = 'return ' + unparse(args[0]);
-                var fpath = Function(vars, t)(file, dirname);
-                var enc = args[1]
-                    ? Function('return ' + unparse(args[1]))()
-                    : 'utf8'
-                ;
-                ++ pending;
-                fs.readFile(fpath, enc, function (err, src) {
-                    if (err) return tr.emit('error', err);
-                    node.update(JSON.stringify(src));
-                    if (--pending === 0) finish(output);
-                });
+                var canBeInlined = !containsUndefinedVariable(args[0]);
+                
+                if (canBeInlined) {
+                    var t = 'return ' + unparse(args[0]);
+                    var fpath = Function(vars, t)(file, dirname);
+                    var enc = args[1]
+                        ? Function('return ' + unparse(args[1]))()
+                        : 'utf8'
+                    ;
+                    ++ pending;
+                    fs.readFile(fpath, enc, function (err, src) {
+                        if (err) return tr.emit('error', err);
+                        node.update(JSON.stringify(src));
+                        if (--pending === 0) finish(output);
+                    });
+                }
             }
         });
         return output;
