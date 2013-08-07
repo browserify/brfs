@@ -5,7 +5,6 @@ var through = require('through');
 var falafel = require('falafel');
 var unparse = require('escodegen').generate;
 
-
 module.exports = function (file) {
     if (/\.json$/.test(file)) return through();
     var data = '';
@@ -24,14 +23,15 @@ module.exports = function (file) {
             }
         }
         else if (node.type === 'BinaryExpression') {
-            return containsUndefinedVariable(node.left) || containsUndefinedVariable(node.right);
+            return containsUndefinedVariable(node.left)
+                || containsUndefinedVariable(node.right)
+            ;
         }
         else {
             return false;
         }
     };
-
-
+    
     function write (buf) { data += buf }
     function end () {
         try { var output = parse() }
