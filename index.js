@@ -61,12 +61,9 @@ module.exports = function (file) {
             && node.parent.left.type === 'Identifier') {
                 fsNames[node.parent.left.name] = true;
             }
+            
             if (node.type === 'CallExpression'
-            && node.callee.type === 'MemberExpression'
-            && node.callee.object.type === 'Identifier'
-            && fsNames[node.callee.object.name]
-            && node.callee.property.type === 'Identifier'
-            && node.callee.property.name === 'readFileSync') {
+            && isFs(node.callee) && isRFS(node.callee.property)) {
                 var args = node.arguments;
                 var canBeInlined = !containsUndefinedVariable(args[0]);
                 
@@ -88,7 +85,19 @@ module.exports = function (file) {
         });
         return output;
     }
+    
+    function isFs (p) {
+        if (!p) return false;
+        if (p.type !== 'MemberExpression') return false;
+        return (p.object.type === 'Identifier' && fsNames[p.object.name])
+            || isRequire(p.object)
+        ;
+    }
 };
+
+function isRFS (node) {
+    return node.type === 'Identifier' && node.name === 'readFileSync';
+}
 
 function isRequire (node) {
     var c = node.callee;
