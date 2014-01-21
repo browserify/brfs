@@ -24,6 +24,7 @@
     "homepage": "https://github.com/substack/brfs",
     "keywords": [
         "browserify",
+        "browserify-transform",
         "fs",
         "readFileSync",
         "plugin",
