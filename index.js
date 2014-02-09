@@ -78,6 +78,7 @@ module.exports = function (file) {
                     fs.readFile(fpath, enc, function (err, src) {
                         if (err) return tr.emit('error', err);
                         node.update(JSON.stringify(src));
+                        tr.emit('file', fpath);
                         if (--pending === 0) finish(output);
                     });
                 }
