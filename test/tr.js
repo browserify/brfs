@@ -7,7 +7,7 @@ var fs = require('fs');
 var path = require('path');
 
 test('parse non-js, non-json files', function (t) {
-    t.plan(1);
+    t.plan(2);
     
     var b = browserify();
     b.add(__dirname + '/files/tr.beep');
@@ -25,9 +25,14 @@ test('parse non-js, non-json files', function (t) {
     });
     b.transform(path.dirname(__dirname));
     
-    b.bundle(function (err, src) {
+    var bs = b.bundle(function (err, src) {
         if (err) t.fail(err);
         vm.runInNewContext(src, { console: { log: log } });
+    });
+    bs.on('transform', function (tr) {
+        tr.on('file', function (file) {
+            t.equal(file, __dirname + '/files/tr.html');
+        });
     });
     
     function log (msg) {

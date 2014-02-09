@@ -11,7 +11,7 @@
     },
     "devDependencies": {
         "tap": "~0.4.0",
-        "browserify": "~2.22.0",
+        "browserify": "~3.25.2",
         "concat-stream": "~1.0.0"
     },
     "scripts": {
