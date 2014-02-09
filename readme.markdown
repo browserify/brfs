@@ -82,6 +82,13 @@ var brfs = require('brfs')
 Return a through stream `tr` inlining `fs.readFileSync()` file contents
 in-place.
 
+# events
+
+## tr.on('file', function (file) {})
+
+For every file included with `fs.readFileSync()`, the `tr` instance emits a
+`'file'` event with the `file` path.
+
 # usage
 
 A tiny command-line program ships with this module to make debugging easier.
