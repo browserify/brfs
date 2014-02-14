@@ -60,6 +60,26 @@ b.transform('brfs');
 b.bundle().pipe(fs.createWriteStream('bundle.js'));
 ```
 
+## async
+
+You can also use `fs.readFile()`:
+
+``` js
+var fs = require('fs');
+fs.readFile(__dirname + '/robot.html', function (err, html) {
+    console.log(html);
+});
+```
+
+When you run this code through brfs, it turns into:
+
+``` js
+var fs = require('fs');
+process.nextTick(function () {(function (err, html) {
+    console.log(html);
+})(null,"<b>beep boop</b>\n")});
+```
+
 # methods
 
 brfs looks for `fs.readFileSync(pathExpr, enc='utf8')`
