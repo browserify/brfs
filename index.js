@@ -76,10 +76,11 @@ module.exports = function (file) {
             var t = 'return ' + unparse(args[0]);
             var fpath = Function(vars, t)(file, dirname);
             
-            var enc = args[1]
-                ? Function('return ' + unparse(args[1]))()
-                : 'utf8'
-            ;
+            var enc = 'utf8';
+            if (!/^Function/.test(args[1]) && args[2]) {
+                enc = Function('return ' + unparse(args[1]))()
+            }
+            
             ++ pending;
             fs.readFile(fpath, enc, function (err, src) {
                 if (err) return tr.emit('error', err);
