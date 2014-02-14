@@ -82,6 +82,10 @@ module.exports = function (file) {
             }
             
             ++ pending;
+            if (typeof enc === 'object' && enc.encoding) {
+                enc = enc.encoding;
+            }
+            
             fs.readFile(fpath, enc, function (err, src) {
                 if (err) return tr.emit('error', err);
                 if (type === 'sync') {
