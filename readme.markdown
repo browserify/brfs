@@ -1,6 +1,6 @@
 # brfs
 
-browserify fs.readFileSync() static asset inliner
+fs.readFileSync() and fs.readFile() static asset browserify transform
 
 [![build status](https://secure.travis-ci.org/substack/brfs.png)](http://travis-ci.org/substack/brfs)
 
@@ -62,13 +62,21 @@ b.bundle().pipe(fs.createWriteStream('bundle.js'));
 
 # methods
 
-brfs looks for `fs.readFileSync(pathExpr, enc='utf8')` calls.
+brfs looks for `fs.readFileSync(pathExpr, enc='utf8')`
+and `fs.readFile(pathExpr, enc='utf8', cb)` calls.
 
 The `pathExpr` function is evaluated as an expression with `__dirname` and
 `__filename` variables available.
 
 If you want differently-encoded file contents for your inline content you can
 set `enc` to `'base64'` or `'hex'`.
+
+In async mode when a callback `cb` is given, the contents of `pathExpr` are
+inlined into the source inside of a `process.nextTick()` call.
+
+When you use a `'file'`-event aware watcher such as
+[watchify](https://npmjs.org/package/watchify), the inlined assets will be
+updated automatically.
 
 If you want to use this plugin directly, not through browserify, the api
 follows.
@@ -86,8 +94,8 @@ in-place.
 
 ## tr.on('file', function (file) {})
 
-For every file included with `fs.readFileSync()`, the `tr` instance emits a
-`'file'` event with the `file` path.
+For every file included with `fs.readFileSync()` or `fs.readFile()`, the `tr`
+instance emits a `'file'` event with the `file` path.
 
 # usage
 
