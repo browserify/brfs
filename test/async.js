@@ -11,7 +11,10 @@ test('async', function (t) {
     b.transform(path.dirname(__dirname));
     b.bundle(function (err, src) {
         if (err) t.fail(err);
-        vm.runInNewContext(src, { console: { log: log } });
+        vm.runInNewContext(src, {
+            setTimeout: setTimeout,
+            console: { log: log }
+        });
     });
     function log (msg) { t.equal(msg, 'what\n') }
 });
@@ -22,7 +25,10 @@ test('async encoding', function (t) {
     b.transform(path.dirname(__dirname));
     b.bundle(function (err, src) {
         if (err) t.fail(err);
-        vm.runInNewContext(src, { console: { log: log } });
+        vm.runInNewContext(src, {
+            setTimeout: setTimeout,
+            console: { log: log }
+        });
     });
     function log (msg) { t.equal(msg, '776861740a') }
 });
@@ -33,7 +39,10 @@ test('async string encoding', function (t) {
     b.transform(path.dirname(__dirname));
     b.bundle(function (err, src) {
         if (err) t.fail(err);
-        vm.runInNewContext(src, { console: { log: log } });
+        vm.runInNewContext(src, {
+            setTimeout: setTimeout,
+            console: { log: log }
+        });
     });
     function log (msg) { t.equal(msg, '776861740a') }
 });

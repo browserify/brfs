@@ -62,27 +62,43 @@ module.exports = function (file) {
                 fsNames[node.parent.left.name] = true;
             }
             
-            if (node.type === 'CallExpression'
-            && isFs(node.callee) && isRFS(node.callee.property)) {
-                var args = node.arguments;
-                var canBeInlined = !containsUndefinedVariable(args[0]);
-                
-                if (canBeInlined) {
-                    var t = 'return ' + unparse(args[0]);
-                    var fpath = Function(vars, t)(file, dirname);
-                    var enc = args[1]
-                        ? Function('return ' + unparse(args[1]))()
-                        : 'utf8'
-                    ;
-                    ++ pending;
-                    fs.readFile(fpath, enc, function (err, src) {
-                        if (err) return tr.emit('error', err);
-                        node.update(JSON.stringify(src));
-                        tr.emit('file', fpath);
-                        if (--pending === 0) finish(output);
-                    });
+            if (node.type !== 'CallExpression' || !isFs(node.callee)) return;
+            
+            var type;
+            if (isRFS(node.callee.property)) type = 'sync';
+            else if (isRF(node.callee.property)) type = 'async';
+            if (!type) return;
+            
+            var args = node.arguments;
+            var canBeInlined = !containsUndefinedVariable(args[0]);
+            if (!canBeInlined) return;
+            
+            var t = 'return ' + unparse(args[0]);
+            var fpath = Function(vars, t)(file, dirname);
+            
+            var enc = args[1]
+                ? Function('return ' + unparse(args[1]))()
+                : 'utf8'
+            ;
+            ++ pending;
+            fs.readFile(fpath, enc, function (err, src) {
+                if (err) return tr.emit('error', err);
+                if (type === 'sync') {
+                    node.update(JSON.stringify(src));
                 }
-            }
+                else if (type === 'async') {
+                    var cb = args[2] || args[1];
+                    if (!cb) return;
+                    node.update(
+                        'process.nextTick(function () {'
+                        + '(' + cb.source() + ')'
+                        + '(null,' + JSON.stringify(src) + ')'
+                        + '})'
+                    );
+                }
+                tr.emit('file', fpath);
+                if (--pending === 0) finish(output);
+            });
         });
         return output;
     }
@@ -98,6 +114,10 @@ module.exports = function (file) {
 
 function isRFS (node) {
     return node.type === 'Identifier' && node.name === 'readFileSync';
+}
+
+function isRF (node) {
+    return node.type === 'Identifier' && node.name === 'readFile';
 }
 
 function isRequire (node) {
