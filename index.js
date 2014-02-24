@@ -77,7 +77,7 @@ module.exports = function (file) {
             var fpath = Function(vars, t)(file, dirname);
             
             var enc = 'utf8';
-            if (!/^Function/.test(args[1]) && args[2]) {
+            if (args[1] && !/^Function/.test(args[1].type)) {
                 enc = Function('return ' + unparse(args[1]))()
             }
             
