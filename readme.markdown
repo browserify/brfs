@@ -18,7 +18,7 @@ for a main.js:
 
 ``` js
 var fs = require('fs');
-var html = fs.readFileSync(__dirname + '/robot.html');
+var html = fs.readFileSync(__dirname + '/robot.html', 'utf8');
 console.log(html);
 ```
 
@@ -39,7 +39,7 @@ $ browserify -t brfs example/main.js > bundle.js
 now in the bundle output file,
 
 ``` js
-var html = fs.readFileSync(__dirname + '/robot.html');
+var html = fs.readFileSync(__dirname + '/robot.html', 'utf8');
 ```
 
 turns into:
@@ -66,7 +66,7 @@ You can also use `fs.readFile()`:
 
 ``` js
 var fs = require('fs');
-fs.readFile(__dirname + '/robot.html', function (err, html) {
+fs.readFile(__dirname + '/robot.html', 'utf8', function (err, html) {
     console.log(html);
 });
 ```
@@ -83,13 +83,14 @@ process.nextTick(function () {(function (err, html) {
 # methods
 
 brfs looks for `fs.readFileSync(pathExpr, enc='utf8')`
-and `fs.readFile(pathExpr, enc='utf8', cb)` calls.
+and `fs.readFile(pathExpr, enc=null, cb)` calls.
 
 The `pathExpr` function is evaluated as an expression with `__dirname` and
 `__filename` variables available.
 
+Just like node, the default encoding is `null` and will give back a `Buffer`.
 If you want differently-encoded file contents for your inline content you can
-set `enc` to `'base64'` or `'hex'`.
+set `enc` to `'utf8'`, `'base64'`, or `'hex'`.
 
 In async mode when a callback `cb` is given, the contents of `pathExpr` are
 inlined into the source inside of a `process.nextTick()` call.
