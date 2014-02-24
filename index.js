@@ -76,20 +76,29 @@ module.exports = function (file) {
             var t = 'return ' + unparse(args[0]);
             var fpath = Function(vars, t)(file, dirname);
             
-            var enc = 'utf8';
+            var enc = null;
             if (args[1] && !/^Function/.test(args[1].type)) {
                 enc = Function('return ' + unparse(args[1]))()
             }
             
             ++ pending;
-            if (typeof enc === 'object' && enc.encoding) {
+            if (enc && typeof enc === 'object' && enc.encoding) {
                 enc = enc.encoding;
             }
             
+            var isBuffer = false;
+            if (enc === null || enc === undefined) {
+                isBuffer = true;
+                enc = 'base64';
+            }
             fs.readFile(fpath, enc, function (err, src) {
                 if (err) return tr.emit('error', err);
+                var code = isBuffer
+                    ? 'Buffer(' + JSON.stringify(src) + ',"base64")'
+                    : JSON.stringify(src)
+                ;
                 if (type === 'sync') {
-                    node.update(JSON.stringify(src));
+                    node.update(code);
                 }
                 else if (type === 'async') {
                     var cb = args[2] || args[1];
@@ -97,7 +106,7 @@ module.exports = function (file) {
                     node.update(
                         'process.nextTick(function () {'
                         + '(' + cb.source() + ')'
-                        + '(null,' + JSON.stringify(src) + ')'
+                        + '(null,' + code + ')'
                         + '})'
                     );
                 }
