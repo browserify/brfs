@@ -92,7 +92,7 @@ module.exports = function (file) {
                 enc = 'base64';
             }
             fs.readFile(fpath, enc, function (err, src) {
-                if (err) return tr.emit('error', err);
+                if (err) return tr.emit('error', errorWithFile(file, err));
                 var code = isBuffer
                     ? 'Buffer(' + JSON.stringify(src) + ',"base64")'
                     : JSON.stringify(src)
@@ -141,4 +141,10 @@ function isRequire (node) {
         && c.type === 'Identifier'
         && c.name === 'require'
     ;
+}
+
+function errorWithFile (file, err) {
+    var e = new Error(err.message + '\n  while running brfs on ' + file);
+    e.file = file;
+    return e;
 }
