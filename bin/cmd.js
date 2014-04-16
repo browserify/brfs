@@ -18,4 +18,3 @@ var rs = fromFile
 
 var fpath = fromFile ? file : path.join(process.cwd(), '-');
 rs.pipe(brfs(fpath)).pipe(process.stdout);
-rs.resume();
