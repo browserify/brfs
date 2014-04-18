@@ -65,8 +65,11 @@ module.exports = function (file) {
             if (node.type !== 'CallExpression' || !isFs(node.callee)) return;
             
             var type;
+            var readdir;
             if (isRFS(node.callee.property)) type = 'sync';
             else if (isRF(node.callee.property)) type = 'async';
+            else if (isRD(node.callee.property)) readdir = type = 'async';
+            else if (isRDS(node.callee.property)) readdir = type = 'sync';
             if (!type) return;
             
             var args = node.arguments;
@@ -91,9 +94,16 @@ module.exports = function (file) {
                 isBuffer = true;
                 enc = 'base64';
             }
-            fs.readFile(fpath, enc, function (err, src) {
+
+            if (readdir) {
+                fs.readdir(fpath, read);
+            } else {
+                fs.readFile(fpath, enc, read);
+            }
+
+            function read(err, src) {
                 if (err) return tr.emit('error', errorWithFile(file, err));
-                var code = isBuffer
+                var code = !readdir && isBuffer
                     ? 'Buffer(' + JSON.stringify(src) + ',"base64")'
                     : JSON.stringify(src)
                 ;
@@ -110,9 +120,10 @@ module.exports = function (file) {
                         + '})'
                     );
                 }
-                tr.emit('file', fpath);
+
+                if (!readdir) tr.emit('file', fpath);
                 if (--pending === 0) finish(output);
-            });
+            }
         });
         return output;
     }
@@ -132,6 +143,14 @@ function isRFS (node) {
 
 function isRF (node) {
     return node.type === 'Identifier' && node.name === 'readFile';
+}
+
+function isRD (node) {
+    return node.type === 'Identifier' && node.name === 'readdir';
+}
+
+function isRDS (node) {
+    return node.type === 'Identifier' && node.name === 'readdirSync';
 }
 
 function isRequire (node) {
