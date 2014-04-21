@@ -46,6 +46,7 @@ module.exports = function (file) {
             if (isBuffer) this.push(',"base64")');
             this.push(')})');
             this.push(null);
+            sm.emit('file', file);
             next()
         }
     }
@@ -59,13 +60,13 @@ module.exports = function (file) {
         if (enc && typeof enc === 'object' && enc.encoding) {
             enc = enc.encoding;
         }
-        var q = fs.createReadStream(file,  { encoding: enc }).pipe(quote());
+        var stream = fs.createReadStream(file,  { encoding: enc })
+            .pipe(quote()).pipe(through(write, end))
+        ;
         if (isBuffer) {
-            var stream = through(write, end);
             stream.push('Buffer(');
-            return q.pipe(stream);
         }
-        else return q;
+        return stream;
         
         function write (buf, enc, next) {
             this.push(buf);
@@ -74,6 +75,7 @@ module.exports = function (file) {
         function end (next) {
             if (isBuffer) this.push(',"base64")');
             this.push(null);
+            sm.emit('file', file);
             next();
         }
     }
