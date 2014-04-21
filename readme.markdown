@@ -106,10 +106,14 @@ follows.
 var brfs = require('brfs')
 ```
 
-## var tr = brfs(file)
+## var tr = brfs(file, opts)
 
 Return a through stream `tr` inlining `fs.readFileSync()` file contents
 in-place.
+
+Optionally, you can set which `opts.vars` will be used in the
+[static argument evaluation](https://npmjs.org/package/static-eval)
+in addition to `__dirname` and `__filename`.
 
 # events
 
