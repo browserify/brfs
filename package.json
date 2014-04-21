@@ -1,42 +1,43 @@
 {
-    "name": "brfs",
-    "version": "1.0.2",
-    "description": "browserify fs.readFileSync() static asset inliner",
-    "main": "index.js",
-    "bin": "bin/cmd.js",
-    "dependencies": {
-      "quote-stream": "^0.0.0",
-      "static-module": "^0.0.2",
-      "through2": "^0.4.1"
-    },
-    "devDependencies": {
-        "tap": "^0.4.8",
-        "browserify": "^3.44.1",
-        "concat-stream": "^1.4.5"
-    },
-    "scripts": {
-        "test": "tap test/*.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/substack/brfs.git"
-    },
-    "homepage": "https://github.com/substack/brfs",
-    "keywords": [
-        "browserify",
-        "browserify-transform",
-        "fs",
-        "readFileSync",
-        "plugin",
-        "static",
-        "asset",
-        "bundle",
-        "base64"
-    ],
-    "author": {
-        "name": "James Halliday",
-        "email": "mail@substack.net",
-        "url": "http://substack.net"
-    },
-    "license": "MIT"
+  "name": "brfs",
+  "version": "1.0.2",
+  "description": "browserify fs.readFileSync() static asset inliner",
+  "main": "index.js",
+  "bin": "bin/cmd.js",
+  "dependencies": {
+    "quote-stream": "^0.0.0",
+    "static-module": "^0.0.2",
+    "through2": "^0.4.1"
+  },
+  "devDependencies": {
+    "browserify": "^3.44.1",
+    "concat-stream": "^1.4.5",
+    "tap": "^0.4.8",
+    "through": "^2.3.4"
+  },
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/substack/brfs.git"
+  },
+  "homepage": "https://github.com/substack/brfs",
+  "keywords": [
+    "browserify",
+    "browserify-transform",
+    "fs",
+    "readFileSync",
+    "plugin",
+    "static",
+    "asset",
+    "bundle",
+    "base64"
+  ],
+  "author": {
+    "name": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net"
+  },
+  "license": "MIT"
 }
