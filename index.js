@@ -4,12 +4,17 @@ var through = require('through2');
 var fs = require('fs');
 var path = require('path');
 
-module.exports = function (file) {
+module.exports = function (file, opts) {
     if (/\.json$/.test(file)) return through();
     var vars = {
         __filename: file,
         __dirname: path.dirname(file)
     };
+    if (!opts) opts = {};
+    if (opts.vars) Object.keys(opts.vars).forEach(function (key) {
+        vars[key] = opts.vars[key];
+    });
+    
     var sm = staticModule(
         { fs: { readFileSync: readFileSync, readFile: readFile } },
         { vars: vars }
