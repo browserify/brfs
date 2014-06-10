@@ -3,7 +3,9 @@
   "version": "1.1.1",
   "description": "browserify fs.readFileSync() static asset inliner",
   "main": "index.js",
-  "bin": "bin/cmd.js",
+  "bin": {
+    "brfs": "bin/cmd.js"
+  },
   "dependencies": {
     "quote-stream": "~0.0.0",
     "static-module": "~0.0.3",
