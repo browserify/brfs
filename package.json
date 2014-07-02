@@ -8,14 +8,14 @@
   },
   "dependencies": {
     "quote-stream": "~0.0.0",
-    "static-module": "~0.0.3",
+    "static-module": "^1.0.0",
     "through2": "~0.4.1"
   },
   "devDependencies": {
-    "browserify": "~3.44.1",
-    "concat-stream": "~1.4.5",
+    "browserify": "^4.2.0",
+    "concat-stream": "^1.4.5",
     "tap": "~0.4.8",
-    "through": "~2.3.4"
+    "through": "^2.3.4"
   },
   "scripts": {
     "test": "tap test/*.js"
