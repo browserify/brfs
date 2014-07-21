@@ -16,7 +16,14 @@ module.exports = function (file, opts) {
     });
     
     var sm = staticModule(
-        { fs: { readFileSync: readFileSync, readFile: readFile } },
+        {
+            fs: {
+                readFileSync: readFileSync,
+                readFile: readFile,
+                readdirSync: readdirSync,
+                readdir: readdir
+            }
+        },
         { vars: vars }
     );
     return sm;
@@ -81,6 +88,51 @@ module.exports = function (file, opts) {
             if (isBuffer) this.push(',"base64")');
             this.push(null);
             sm.emit('file', file);
+            next();
+        }
+    }
+    
+    function readdir(path, cb) {
+        var stream = through(write, end);
+
+        stream.push('process.nextTick(function(){(' + cb + ')(null,');
+        fs.readdir(path, function (err, src) {
+            if (err) {
+                stream.emit('error', err);
+                return;
+            }
+            stream.push(JSON.stringify(src));
+            stream.end(')})');
+        });
+        return stream;
+
+        function write (buf, enc, next) {
+            this.push(buf);
+            next();
+        }
+        function end (next) {
+            this.push(null);
+            next();
+        }
+    }
+
+    function readdirSync (path) {
+        var stream = through(write, end);
+        fs.readdir(path, function (err, src) {
+            if (err) {
+                stream.emit('error', err);
+                return;
+            }
+            stream.end(JSON.stringify(src));
+        });
+        return stream;
+
+        function write (buf, enc, next) {
+            this.push(buf);
+            next();
+        }
+        function end (next) {
+            this.push(null);
             next();
         }
     }
