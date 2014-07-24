@@ -82,8 +82,12 @@ process.nextTick(function () {(function (err, html) {
 
 # methods
 
-brfs looks for `fs.readFileSync(pathExpr, enc='utf8')`
-and `fs.readFile(pathExpr, enc=null, cb)` calls.
+brfs looks for:
+
+* `fs.readFileSync(pathExpr, enc='utf8')`
+* `fs.readFile(pathExpr, enc=null, cb)`
+* `fs.readdirSync(pathExpr, cb)`
+* `fs.readdir(pathExpr, cb)`
 
 The `pathExpr` function is evaluated as an expression with `__dirname` and
 `__filename` variables available.
