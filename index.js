@@ -6,6 +6,7 @@ var path = require('path');
 
 module.exports = function (file, opts) {
     if (/\.json$/.test(file)) return through();
+    if (/\.css$/.test(file)) return through();
     var vars = {
         __filename: file,
         __dirname: path.dirname(file)
