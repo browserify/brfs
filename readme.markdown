@@ -84,7 +84,7 @@ process.nextTick(function () {(function (err, html) {
 
 brfs looks for:
 
-* `fs.readFileSync(pathExpr, enc='utf8')`
+* `fs.readFileSync(pathExpr, enc=null)`
 * `fs.readFile(pathExpr, enc=null, cb)`
 * `fs.readdirSync(pathExpr, cb)`
 * `fs.readdir(pathExpr, cb)`
