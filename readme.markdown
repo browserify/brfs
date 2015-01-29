@@ -92,6 +92,9 @@ brfs looks for:
 The `pathExpr` function is evaluated as an expression with `__dirname` and
 `__filename` variables available.
 
+You can use methods from the path module such as `path.join()` if you first do
+`var path = require('path')`.
+
 Just like node, the default encoding is `null` and will give back a `Buffer`.
 If you want differently-encoded file contents for your inline content you can
 set `enc` to `'utf8'`, `'base64'`, or `'hex'`.
