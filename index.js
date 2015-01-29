@@ -24,7 +24,7 @@ module.exports = function (file, opts) {
                 readdir: readdir
             }
         },
-        { vars: vars }
+        { vars: vars, varModules: { path: path } }
     );
     return sm;
     

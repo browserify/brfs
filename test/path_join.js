@@ -7,7 +7,7 @@ var path = require('path');
 
 var html = fs.readFileSync(__dirname + '/files/robot.html', 'utf8');
 
-if (false) test('path.join', function (t) {
+test('path.join', function (t) {
     t.plan(1);
     
     var b = browserify();
