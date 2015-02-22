@@ -17,5 +17,5 @@ test('require.resolve', function (t) {
         vm.runInNewContext(src, { console: { log: log } });
     });
     
-    function log (msg) { t.equal(msg, 'amaze') }
+    function log (msg) { t.equal(msg, 'amaze\n') }
 });

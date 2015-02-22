@@ -3,12 +3,18 @@ var quote = require('quote-stream');
 var through = require('through2');
 var fs = require('fs');
 var path = require('path');
+var resolve = require('resolve');
 
 module.exports = function (file, opts) {
     if (/\.json$/.test(file)) return through();
+    
+    function resolver (p) {
+        return resolve.sync(p, { basedir: path.dirname(file) });
+    }
     var vars = {
         __filename: file,
-        __dirname: path.dirname(file)
+        __dirname: path.dirname(file),
+        require: { resolve: resolver }
     };
     if (!opts) opts = {};
     if (opts.vars) Object.keys(opts.vars).forEach(function (key) {

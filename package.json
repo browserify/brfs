@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "quote-stream": "~0.0.0",
+    "resolve": "^1.1.5",
     "static-module": "^1.1.0",
     "through2": "~0.4.1"
   },
