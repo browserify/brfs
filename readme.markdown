@@ -89,11 +89,14 @@ brfs looks for:
 * `fs.readdirSync(pathExpr, cb)`
 * `fs.readdir(pathExpr, cb)`
 
-The `pathExpr` function is evaluated as an expression with `__dirname` and
-`__filename` variables available.
+Inside of each `pathExpr`, you can use
+[statically analyzable](http://npmjs.org/package/static-eval) expressions and
+these variables and functions:
 
-You can use methods from the path module such as `path.join()` if you first do
-`var path = require('path')`.
+* `__dirname`
+* `__filename`
+* `path` if you `var path = require('path')` first
+* `require.resolve()`
 
 Just like node, the default encoding is `null` and will give back a `Buffer`.
 If you want differently-encoded file contents for your inline content you can
