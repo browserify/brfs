@@ -6,7 +6,10 @@ var path = require('path');
 var resolve = require('resolve');
 
 module.exports = function (file, opts) {
-    if (/\.json$/.test(file)) return through();
+    var ignore = opts.ignore || opts.i || /\.json$/;
+    if (typeof ignore === 'string') { ignore = new RegExp(ignore); }
+
+    if (ignore.test(file)) return through();
     
     function resolver (p) {
         return resolve.sync(p, { basedir: path.dirname(file) });
