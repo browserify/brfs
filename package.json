@@ -1,16 +1,16 @@
 {
   "name": "brfs",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "browserify fs.readFileSync() static asset inliner",
   "main": "index.js",
   "bin": {
     "brfs": "bin/cmd.js"
   },
   "dependencies": {
-    "quote-stream": "~0.0.0",
+    "quote-stream": "^1.0.1",
     "resolve": "^1.1.5",
     "static-module": "^1.1.0",
-    "through2": "~0.4.1"
+    "through2": "^2.0.0"
   },
   "devDependencies": {
     "browserify": "^4.2.0",
