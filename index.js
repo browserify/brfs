@@ -79,6 +79,7 @@ module.exports = function (file, opts) {
             enc = enc.encoding;
         }
         var stream = fs.createReadStream(file,  { encoding: enc })
+            .on('error', function (err) { sm.emit('error', err) })
             .pipe(quote()).pipe(through(write, end))
         ;
         if (isBuffer) {
