@@ -121,9 +121,38 @@ var brfs = require('brfs')
 Return a through stream `tr` inlining `fs.readFileSync()` file contents
 in-place.
 
-Optionally, you can set which `opts.vars` will be used in the
-[static argument evaluation](https://npmjs.org/package/static-eval)
-in addition to `__dirname` and `__filename`.
+### available options
+
+- `opts.transformer`: allows for interception of the read file data to perform
+  modifications
+  ```js
+  var through = require('through');
+
+  // ...
+
+  b.transform(require('brfs'), {
+      transformer: function(filename) {
+          function write (data) {
+              data = data.replace('#', '##');
+
+              this.queue(data);
+          };
+
+          function end () {
+              this.queue(null);
+          };
+
+          if (/\.md$/.test(filename)) {
+              return through(write, end);
+          }
+
+          return through();
+      }
+  });
+  ```
+
+- `opts.vars`: used in the [static argument evaluation](https://npmjs.org/package/static-eval)
+  in addition to `__dirname` and `__filename`
 
 # events
 

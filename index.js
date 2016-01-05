@@ -23,6 +23,12 @@ module.exports = function (file, opts) {
         vars[key] = opts.vars[key];
     });
 
+    if (/\.js$/.test(opts.transformer)) {
+        opts.transformer = require(path.resolve(opts.transformer));
+    } else if (typeof opts.transformer === 'string') {
+        opts.transformer = require(opts.transformer);
+    }
+
     var sm = staticModule(
         {
             fs: {
@@ -63,6 +69,10 @@ module.exports = function (file, opts) {
         var s = fs.createReadStream(file, { encoding: enc });
             s.on('error', function (err) { sm.emit('error', err) });
 
+        if (opts.transformer) {
+            s = s.pipe(opts.transformer(file));
+        }
+
         return s.pipe(quote()).pipe(stream);
 
         function write (buf, enc, next) {
@@ -72,6 +82,7 @@ module.exports = function (file, opts) {
 
         function end (next) {
             if (isBuffer) this.push(',"base64")');
+
             this.push(')})');
             this.push(null);
             sm.emit('file', file);
@@ -91,10 +102,14 @@ module.exports = function (file, opts) {
             enc = enc.encoding;
         }
 
-        var stream = fs.createReadStream(file,  { encoding: enc })
-            .on('error', function (err) { sm.emit('error', err) })
-            .pipe(quote()).pipe(through(write, end))
-        ;
+        var stream = fs.createReadStream(file, { encoding: enc })
+                       .on('error', function (err) { sm.emit('error', err) });
+
+        if (opts.transformer) {
+            stream = stream.pipe(opts.transformer(file));
+        }
+
+        stream = stream.pipe(quote()).pipe(through(write, end));
 
         if (isBuffer) {
             stream.push('Buffer(');
@@ -123,7 +138,6 @@ module.exports = function (file, opts) {
         fs.readdir(path, function (err, src) {
             if (err) {
                 stream.emit('error', err);
-
                 return;
             }
 
