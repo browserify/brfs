@@ -11,11 +11,13 @@ module.exports = function (file, opts) {
     function resolver (p) {
         return resolve.sync(p, { basedir: path.dirname(file) });
     }
+
     var vars = {
         __filename: file,
         __dirname: path.dirname(file),
         require: { resolve: resolver }
     };
+
     if (!opts) opts = {};
     if (opts.vars) Object.keys(opts.vars).forEach(function (key) {
         vars[key] = opts.vars[key];
@@ -32,6 +34,7 @@ module.exports = function (file, opts) {
         },
         { vars: vars, varModules: { path: path } }
     );
+
     return sm;
 
     function readFile (file, enc, cb) {
@@ -39,27 +42,34 @@ module.exports = function (file, opts) {
             cb = enc;
             enc = null;
         }
+
         if (enc && typeof enc === 'object' && enc.encoding) {
             enc = enc.encoding;
         }
+
         var isBuffer = false;
+
         if (enc === null || enc === undefined) {
             isBuffer = true;
             enc = 'base64';
         }
 
         var stream = through(write, end);
+
         stream.push('process.nextTick(function(){(' + cb + ')(null,');
+
         if (isBuffer) stream.push('Buffer(');
 
         var s = fs.createReadStream(file, { encoding: enc });
-        s.on('error', function (err) { sm.emit('error', err) });
+            s.on('error', function (err) { sm.emit('error', err) });
+
         return s.pipe(quote()).pipe(stream);
 
         function write (buf, enc, next) {
             this.push(buf);
             next();
         }
+
         function end (next) {
             if (isBuffer) this.push(',"base64")');
             this.push(')})');
@@ -71,28 +81,35 @@ module.exports = function (file, opts) {
 
     function readFileSync (file, enc) {
         var isBuffer = false;
+
         if (enc === null || enc === undefined) {
             isBuffer = true;
             enc = 'base64';
         }
+
         if (enc && typeof enc === 'object' && enc.encoding) {
             enc = enc.encoding;
         }
+
         var stream = fs.createReadStream(file,  { encoding: enc })
             .on('error', function (err) { sm.emit('error', err) })
             .pipe(quote()).pipe(through(write, end))
         ;
+
         if (isBuffer) {
             stream.push('Buffer(');
         }
+
         return stream;
 
         function write (buf, enc, next) {
             this.push(buf);
             next();
         }
+
         function end (next) {
             if (isBuffer) this.push(',"base64")');
+
             this.push(null);
             sm.emit('file', file);
             next();
@@ -106,17 +123,21 @@ module.exports = function (file, opts) {
         fs.readdir(path, function (err, src) {
             if (err) {
                 stream.emit('error', err);
+
                 return;
             }
+
             stream.push(JSON.stringify(src));
             stream.end(')})');
         });
+
         return stream;
 
         function write (buf, enc, next) {
             this.push(buf);
             next();
         }
+
         function end (next) {
             this.push(null);
             next();
@@ -125,19 +146,23 @@ module.exports = function (file, opts) {
 
     function readdirSync (path) {
         var stream = through(write, end);
+
         fs.readdir(path, function (err, src) {
             if (err) {
                 stream.emit('error', err);
                 return;
             }
+
             stream.end(JSON.stringify(src));
         });
+
         return stream;
 
         function write (buf, enc, next) {
             this.push(buf);
             next();
         }
+
         function end (next) {
             this.push(null);
             next();
