@@ -140,13 +140,13 @@ A tiny command-line program ships with this module to make debugging easier.
 usage:
 
   brfs file
- 
+
     Inline `fs.readFileSync()` calls from `file`, printing the transformed file
     contents to stdout.
 
   brfs
   brfs -
- 
+
     Inline `fs.readFileSync()` calls from stdin, printing the transformed file
     contents to stdout.
 

@@ -7,7 +7,7 @@ var resolve = require('resolve');
 
 module.exports = function (file, opts) {
     if (/\.json$/.test(file)) return through();
-    
+
     function resolver (p) {
         return resolve.sync(p, { basedir: path.dirname(file) });
     }
@@ -20,7 +20,7 @@ module.exports = function (file, opts) {
     if (opts.vars) Object.keys(opts.vars).forEach(function (key) {
         vars[key] = opts.vars[key];
     });
-    
+
     var sm = staticModule(
         {
             fs: {
@@ -33,7 +33,7 @@ module.exports = function (file, opts) {
         { vars: vars, varModules: { path: path } }
     );
     return sm;
-    
+
     function readFile (file, enc, cb) {
         if (typeof enc === 'function') {
             cb = enc;
@@ -47,15 +47,15 @@ module.exports = function (file, opts) {
             isBuffer = true;
             enc = 'base64';
         }
-        
+
         var stream = through(write, end);
         stream.push('process.nextTick(function(){(' + cb + ')(null,');
         if (isBuffer) stream.push('Buffer(');
-        
+
         var s = fs.createReadStream(file, { encoding: enc });
         s.on('error', function (err) { sm.emit('error', err) });
         return s.pipe(quote()).pipe(stream);
-        
+
         function write (buf, enc, next) {
             this.push(buf);
             next();
@@ -68,7 +68,7 @@ module.exports = function (file, opts) {
             next()
         }
     }
-    
+
     function readFileSync (file, enc) {
         var isBuffer = false;
         if (enc === null || enc === undefined) {
@@ -86,7 +86,7 @@ module.exports = function (file, opts) {
             stream.push('Buffer(');
         }
         return stream;
-        
+
         function write (buf, enc, next) {
             this.push(buf);
             next();
@@ -98,7 +98,7 @@ module.exports = function (file, opts) {
             next();
         }
     }
-    
+
     function readdir(path, cb) {
         var stream = through(write, end);
 

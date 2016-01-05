@@ -13,7 +13,7 @@ test('cmd.js', function (t) {
       if (error !== null) {
         t.fail();
       } else {
-        vm.runInNewContext(stdout, { 
+        vm.runInNewContext(stdout, {
           require: function () {},
           console: { log: log }
         });
