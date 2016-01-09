@@ -86,7 +86,7 @@ brfs looks for:
 
 * `fs.readFileSync(pathExpr, enc=null)`
 * `fs.readFile(pathExpr, enc=null, cb)`
-* `fs.readdirSync(pathExpr, cb)`
+* `fs.readdirSync(pathExpr)`
 * `fs.readdir(pathExpr, cb)`
 
 Inside of each `pathExpr`, you can use
