@@ -163,6 +163,24 @@ npm install brfs
 then use `-t brfs` with the browserify command or use `.transform('brfs')` from
 the browserify api.
 
+# gotchas
+
+Since `brfs` evaluates your source code *statically*, you can't use dynamic expressions that need to be evaluated at run time. For example:
+
+```js
+// WILL NOT WORK!
+var file = window.someFilePath;
+var str = require('fs').readFileSync(file, 'utf8');
+```
+
+Instead, you must use simpler expressions that can be resolved at build-time:
+
+```js
+var str = require('fs').readFileSync(__dirname + '/file.txt', 'utf8');
+```
+
+Another gotcha: `brfs` does not yet support ES2015 syntax like destructuring or `import` statements. See [brfs-babel](https://github.com/Jam3/brfs-babel) for an experimental replacement that supports this syntax.
+
 # license
 
 MIT
