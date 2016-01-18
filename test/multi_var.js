@@ -15,9 +15,7 @@ test('multiple var assignments', function (t) {
     b.transform(path.dirname(__dirname));
     
     b.bundle(function (err, src) {
-        //if (err) t.fail(err);
-console.error('NOT PRESENTLY WORKING: ' + err); 
-return t.ok(true);
+        if (err) t.fail(err);
         vm.runInNewContext(src, { console: { log: log } });
     });
     
