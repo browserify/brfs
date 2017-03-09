@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 var fs = require('fs');
 var path = require('path');
-var brfs = require('../');
+var brfs = require('brfs');
 var file = process.argv[2];
 
 if (file === '-h' || file === '--help') {
