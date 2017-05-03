@@ -1,6 +1,6 @@
 {
   "name": "brfs",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "browserify fs.readFileSync() static asset inliner",
   "main": "index.js",
   "bin": {
@@ -9,12 +9,12 @@
   "dependencies": {
     "quote-stream": "^1.0.1",
     "resolve": "^1.1.5",
-    "static-module": "^1.1.0",
+    "static-module": "^1.3.2",
     "through2": "^2.0.0"
   },
   "devDependencies": {
     "browserify": "^4.2.0",
-    "concat-stream": "^1.4.5",
+    "concat-stream": "^1.6.0",
     "tap": "~0.4.8",
     "through": "^2.3.4"
   },
