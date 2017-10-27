@@ -4,9 +4,12 @@ var through = require('through2');
 var fs = require('fs');
 var path = require('path');
 var resolve = require('resolve');
+var minimatch = require('minimatch');
 
 module.exports = function (file, opts) {
     if (/\.json$/.test(file)) return through();
+    if (opts.exclude && minimatch(file, opts.exclude)) return through();
+    if (opts.include && ! minimatch(file, opts.include)) return through();
     
     function resolver (p) {
         return resolve.sync(p, { basedir: path.dirname(file) });

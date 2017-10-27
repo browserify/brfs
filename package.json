@@ -7,6 +7,7 @@
     "brfs": "bin/cmd.js"
   },
   "dependencies": {
+    "minimatch": "^3.0.4",
     "quote-stream": "^1.0.1",
     "resolve": "^1.1.5",
     "static-module": "^1.1.0",

@@ -125,6 +125,8 @@ Optionally, you can set which `opts.vars` will be used in the
 [static argument evaluation](https://npmjs.org/package/static-eval)
 in addition to `__dirname` and `__filename`.
 
+Also, it's possible to define [minimatch](https://github.com/isaacs/minimatch) patterns against absolute paths in `opts.include` and `opts.exclude` to transform only a subset of source files.
+
 # events
 
 ## tr.on('file', function (file) {})
@@ -140,13 +142,13 @@ A tiny command-line program ships with this module to make debugging easier.
 usage:
 
   brfs file
- 
+
     Inline `fs.readFileSync()` calls from `file`, printing the transformed file
     contents to stdout.
 
   brfs
   brfs -
- 
+
     Inline `fs.readFileSync()` calls from stdin, printing the transformed file
     contents to stdout.
 
