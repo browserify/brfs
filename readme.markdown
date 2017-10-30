@@ -1,3 +1,7 @@
+### This repository contains a fork of [brfs](https://github.com/browserify/brfs) published as [brfs2 in npm] (https://www.npmjs.com/package/brfs2) until [this pull request will be merged](https://github.com/browserify/brfs/pull/82).
+
+*****
+
 # brfs
 
 fs.readFileSync() and fs.readFile() static asset browserify transform

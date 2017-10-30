@@ -1,7 +1,7 @@
 {
-  "name": "brfs",
+  "name": "brfs2",
   "version": "1.4.3",
-  "description": "browserify fs.readFileSync() static asset inliner",
+  "description": "Browserify fs.readFileSync() static asset inliner (fork)",
   "main": "index.js",
   "bin": {
     "brfs": "bin/cmd.js"
@@ -24,9 +24,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/substack/brfs.git"
+    "url": "git://github.com/jholster/brfs.git"
   },
-  "homepage": "https://github.com/substack/brfs",
+  "homepage": "https://github.com/jholster/brfs",
   "keywords": [
     "browserify",
     "browserify-transform",
@@ -39,9 +39,8 @@
     "base64"
   ],
   "author": {
-    "name": "James Halliday",
-    "email": "mail@substack.net",
-    "url": "http://substack.net"
+    "name": "Jaakko Holster",
+    "email": "holster@iki.fi"
   },
   "license": "MIT"
 }
