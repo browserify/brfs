@@ -179,7 +179,7 @@ Instead, you must use simpler expressions that can be resolved at build-time:
 var str = require('fs').readFileSync(__dirname + '/file.txt', 'utf8');
 ```
 
-Another gotcha: `brfs` does not yet support ES2015 syntax like destructuring or `import` statements. See [brfs-babel](https://github.com/Jam3/brfs-babel) for an experimental replacement that supports this syntax.
+Another gotcha: `brfs` does not yet support ES module `import` statements. See [brfs-babel](https://github.com/Jam3/brfs-babel) for an experimental replacement that supports this syntax.
 
 # license
 
