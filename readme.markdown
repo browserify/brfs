@@ -2,7 +2,7 @@
 
 fs.readFileSync() and fs.readFile() static asset browserify transform
 
-[![build status](https://secure.travis-ci.org/substack/brfs.png)](http://travis-ci.org/substack/brfs)
+[![build status](https://secure.travis-ci.org/browserify/brfs.png)](http://travis-ci.org/browserify/brfs)
 
 This module is a plugin for [browserify](http://browserify.org) to parse the AST
 for `fs.readFileSync()` calls so that you can inline file contents into your
