@@ -125,6 +125,10 @@ Optionally, you can set which `opts.vars` will be used in the
 [static argument evaluation](https://npmjs.org/package/static-eval)
 in addition to `__dirname` and `__filename`.
 
+`opts.ignore` can be used to skip certain files. It expects a `RegExp` but
+if a string is given it will convert. If omitted the default of `/\.json$/`
+is used.
+
 # events
 
 ## tr.on('file', function (file) {})
