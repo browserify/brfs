@@ -9,13 +9,13 @@
   "dependencies": {
     "quote-stream": "^1.0.1",
     "resolve": "^1.1.5",
-    "static-module": "^2.2.0",
+    "static-module": "^3.0.0",
     "through2": "^2.0.0"
   },
   "devDependencies": {
     "browserify": "^16.1.1",
     "concat-stream": "^1.6.0",
-    "tap": "~0.4.8",
+    "tap": "^10.7.3",
     "through": "^2.3.4"
   },
   "scripts": {
