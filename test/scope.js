@@ -13,7 +13,6 @@ test('scope', function (t) {
         if (err) t.fail(err);
         t.pass('build success');
         src = src.toString();
-        console.log(src)
         t.ok(src.indexOf("require('fs')") !== -1, 'kept the require call');
         var sentinel = new Buffer('SCOPE_SENTINEL\n', 'utf8').toString('base64')
         var i = src.indexOf(sentinel);
