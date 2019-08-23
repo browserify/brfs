@@ -128,6 +128,12 @@ in addition to `__dirname` and `__filename`.
 `opts.parserOpts` can be used to configure the parser brfs uses,
 [acorn](https://github.com/acornjs/acorn#main-parser).
 
+`opts.readFileTransform` can be used to transform the filestream of
+the given file. For example you can minify the content.
+
+`opts.readFileSyncTransform` can be used to transform the filestream of
+the given file. For example you can minify the content.
+
 # events
 
 ## tr.on('file', function (file) {})
