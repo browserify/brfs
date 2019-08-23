@@ -11,6 +11,13 @@ module.exports = function (file, opts) {
     function resolver (p) {
         return resolve.sync(p, { basedir: path.dirname(file) });
     }
+    function convertTransformOptionToStream (f, args) {
+        if (typeof f === 'function') {
+            return f.apply(null, args)
+        }
+
+        return f;
+    }
     var vars = {
         __filename: file,
         __dirname: path.dirname(file),
@@ -60,8 +67,13 @@ module.exports = function (file, opts) {
         
         var s = fs.createReadStream(file, { encoding: enc });
         s.on('error', function (err) { sm.emit('error', err) });
+
+        if (opts.readFileTransform) {
+            s = s.pipe(convertTransformOptionToStream(opts.readFileTransform, [file]))
+        }
+
         return s.pipe(quote()).pipe(stream);
-        
+
         function write (buf, enc, next) {
             this.push(buf);
             next();
@@ -74,7 +86,7 @@ module.exports = function (file, opts) {
             next()
         }
     }
-    
+
     function readFileSync (file, enc) {
         var isBuffer = false;
         if (enc === null || enc === undefined) {
@@ -84,10 +96,16 @@ module.exports = function (file, opts) {
         if (enc && typeof enc === 'object' && enc.encoding) {
             enc = enc.encoding;
         }
-        var stream = fs.createReadStream(file,  { encoding: enc })
-            .on('error', function (err) { sm.emit('error', err) })
-            .pipe(quote()).pipe(through(write, end))
-        ;
+        var stream = fs.createReadStream(file, { encoding: enc })
+            .on('error', function (err) { sm.emit('error', err) });
+
+
+        if (opts.readFileSyncTransform) {
+            stream = stream.pipe(convertTransformOptionToStream(opts.readFileSyncTransform, [file]))
+        }
+
+        stream = stream.pipe(quote()).pipe(through(write, end));
+
         if (isBuffer) {
             stream.push('Buffer(');
         }
