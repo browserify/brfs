@@ -56,7 +56,7 @@ module.exports = function (file, opts) {
         
         var stream = through(write, end);
         stream.push('process.nextTick(function(){(' + cb + ')(null,');
-        if (isBuffer) stream.push('Buffer(');
+        if (isBuffer) stream.push('Buffer.from(');
         
         var s = fs.createReadStream(file, { encoding: enc });
         s.on('error', function (err) { sm.emit('error', err) });
