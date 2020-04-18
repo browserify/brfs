@@ -16,15 +16,15 @@ projects.
 
 for a main.js:
 
-``` js
-var fs = require('fs');
-var html = fs.readFileSync(__dirname + '/robot.html', 'utf8');
+```js
+var fs = require("fs");
+var html = fs.readFileSync(__dirname + "/robot.html", "utf8");
 console.log(html);
 ```
 
 and a robot.html:
 
-``` html
+```html
 <b>beep boop</b>
 ```
 
@@ -38,65 +38,67 @@ $ browserify -t brfs example/main.js > bundle.js
 
 now in the bundle output file,
 
-``` js
-var html = fs.readFileSync(__dirname + '/robot.html', 'utf8');
+```js
+var html = fs.readFileSync(__dirname + "/robot.html", "utf8");
 ```
 
 turns into:
 
-``` js
+```js
 var html = "<b>beep boop</b>\n";
 ```
 
 ## or with the api
 
-``` js
-var browserify = require('browserify');
-var fs = require('fs');
+```js
+var browserify = require("browserify");
+var fs = require("fs");
 
-var b = browserify('example/main.js');
-b.transform('brfs');
+var b = browserify("example/main.js");
+b.transform("brfs");
 
-b.bundle().pipe(fs.createWriteStream('bundle.js'));
+b.bundle().pipe(fs.createWriteStream("bundle.js"));
 ```
 
 ## async
 
 You can also use `fs.readFile()`:
 
-``` js
-var fs = require('fs');
-fs.readFile(__dirname + '/robot.html', 'utf8', function (err, html) {
-    console.log(html);
+```js
+var fs = require("fs");
+fs.readFile(__dirname + "/robot.html", "utf8", function (err, html) {
+  console.log(html);
 });
 ```
 
 When you run this code through brfs, it turns into:
 
-``` js
-var fs = require('fs');
-process.nextTick(function () {(function (err, html) {
+```js
+var fs = require("fs");
+process.nextTick(function () {
+  (function (err, html) {
     console.log(html);
-})(null,"<b>beep boop</b>\n")});
+  })(null, "<b>beep boop</b>\n");
+});
 ```
 
 # methods
 
 brfs looks for:
 
-* `fs.readFileSync(pathExpr, enc=null)`
-* `fs.readFile(pathExpr, enc=null, cb)`
-* `fs.readdirSync(pathExpr)`
-* `fs.readdir(pathExpr, cb)`
+- `fs.readFileSync(pathExpr, enc=null)`
+- `fs.readFile(pathExpr, enc=null, cb)`
+- `fs.readdirSync(pathExpr)`
+- `fs.readdir(pathExpr, cb)`
 
 Inside of each `pathExpr`, you can use
 [statically analyzable](http://npmjs.org/package/static-eval) expressions and
 these variables and functions:
 
-* `__dirname`
-* `__filename`
-* `path` if you `var path = require('path')` first
-* `require.resolve()`
+- `__dirname`
+- `__filename`
+- `path` if you `var path = require('path')` first
+- `require.resolve()`
 
 Just like node, the default encoding is `null` and will give back a `Buffer`.
 If you want differently-encoded file contents for your inline content you can
@@ -112,8 +114,8 @@ updated automatically.
 If you want to use this plugin directly, not through browserify, the api
 follows.
 
-``` js
-var brfs = require('brfs')
+```js
+var brfs = require("brfs");
 ```
 
 ## var tr = brfs(file, opts)
@@ -131,9 +133,6 @@ in addition to `__dirname` and `__filename`.
 `opts.readFileTransform` can be used to transform the filestream of
 the given file. For example you can minify the content.
 
-`opts.readFileSyncTransform` can be used to transform the filestream of
-the given file. For example you can minify the content.
-
 # events
 
 ## tr.on('file', function (file) {})
@@ -149,13 +148,13 @@ A tiny command-line program ships with this module to make debugging easier.
 usage:
 
   brfs file
- 
+
     Inline `fs.readFileSync()` calls from `file`, printing the transformed file
     contents to stdout.
 
   brfs
   brfs -
- 
+
     Inline `fs.readFileSync()` calls from stdin, printing the transformed file
     contents to stdout.
 
@@ -174,18 +173,18 @@ the browserify api.
 
 # gotchas
 
-Since `brfs` evaluates your source code *statically*, you can't use dynamic expressions that need to be evaluated at run time. For example:
+Since `brfs` evaluates your source code _statically_, you can't use dynamic expressions that need to be evaluated at run time. For example:
 
 ```js
 // WILL NOT WORK!
 var file = window.someFilePath;
-var str = require('fs').readFileSync(file, 'utf8');
+var str = require("fs").readFileSync(file, "utf8");
 ```
 
 Instead, you must use simpler expressions that can be resolved at build-time:
 
 ```js
-var str = require('fs').readFileSync(__dirname + '/file.txt', 'utf8');
+var str = require("fs").readFileSync(__dirname + "/file.txt", "utf8");
 ```
 
 Another gotcha: `brfs` does not yet support ES module `import` statements. See [brfs-babel](https://github.com/Jam3/brfs-babel) for an experimental replacement that supports this syntax.
