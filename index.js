@@ -49,6 +49,10 @@ module.exports = function (file, opts) {
   return sm;
 
   function readFile(file, enc, cb) {
+    if (file === undefined) {
+      throw new Error('file is not resolvable');
+    }
+    
     if (typeof enc === "function") {
       cb = enc;
       enc = null;
@@ -93,6 +97,10 @@ module.exports = function (file, opts) {
   }
 
   function readFileSync(file, enc) {
+    if (file === undefined) {
+      throw new Error('file is not resolvable');
+    }
+    
     var isBuffer = false;
     if (enc === null || enc === undefined) {
       isBuffer = true;
