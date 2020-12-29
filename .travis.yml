@@ -12,6 +12,13 @@ node_js:
   - "0.12"
   - "0.10"
   - "0.8"
+matrix:
+  allow_failures:
+    - node_js: "4"
+    - node_js: "iojs"
+    - node_js: "0.12"
+    - node_js: "0.10"
+    - node_js: "0.8"
 before_install:
   - 'nvm install-latest-npm'
 sudo: false
